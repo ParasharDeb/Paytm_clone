@@ -57,7 +57,7 @@ userrouter.post("/signin",async(req,res)=>{
         })
     }
 })
-userrouter.post("/update:userId",authMiddleware,async(req,res)=>{
+userrouter.put("/update:userId",authMiddleware,async(req,res)=>{
     const parseddata=Updateschema.safeParse(req.body);
     if(!parseddata || !parseddata.data){
         res.json({
@@ -68,6 +68,31 @@ userrouter.post("/update:userId",authMiddleware,async(req,res)=>{
     await UserModel.updateOne(req.body,{
         //@ts-ignore
         id:req.userId
+    })
+})
+userrouter.get("/bulk", async (req, res) => {
+    const filter = req.query.filter || "";
+
+    const users = await UserModel.find({
+        $or: [{
+            firstName: {
+                "$regex": filter
+            }
+        }, {
+            lastName: {
+                "$regex": filter
+            }
+        }]
+    })
+
+    res.json({
+        //@ts-ignore
+        user: users.map(user => ({
+            email: user.email,
+            firstName: user.firstname,
+            lastName: user.lastname,
+            _id: user._id
+        }))
     })
 })
 export=userrouter
