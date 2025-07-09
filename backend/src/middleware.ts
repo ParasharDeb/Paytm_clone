@@ -1,19 +1,32 @@
-import { NextFunction,Request,Response } from "express";
-import jwt, { decode }  from "jsonwebtoken";
-import { JWT_SECRET } from "./config";
-export const middleware=(req:Request,res:Response,next:NextFunction)=>{
-    const token=req.headers["authorization"]|| " "
-    const decoded=jwt.verify(token,JWT_SECRET)
-    if(decoded){
-        //@ts-ignore                ***figure this out
-        req.userId=decoded._id
-    next()
+import {Request,Response,NextFunction } from "express";
+
+const { JWT_SECRET } = require("./config");
+const jwt = require("jsonwebtoken");
+
+const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
+    const authHeader = req.headers["authorization"] || ' ';
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        res.status(403).json({});
+        return
     }
-    else{
-    res.json({
-            message:"Incorrect username or password"
-        })
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        //@ts-ignore
+        req.userId = decoded.userId;
+
+        next();
+    } catch (err) {
+        res.status(403).json({});
+        return
     }
-    
-    }
-    
+};
+
+exports = {
+    authMiddleware
+}
+
+ 
