@@ -17,14 +17,18 @@ userrouter.post("/signup",async(req,res)=>{
             message:"Email already registered"
         })
     }
-    await UserModel.create({
+    const user=await UserModel.create({
         firstname:parseddata.data?.firstname,
         lastname:parseddata.data?.lastname,
         password:parseddata.data?.password,
         email:parseddata.data?.email
     })
+    const userId=user._id;
+    const token=jwt.sign({
+        id:userId
+    },JWT_SECRET)
     res.json({
-        message:"You have signed up succesfully"
+        token:token
     })
 })
 userrouter.post("/signin",async(req,res)=>{
@@ -40,7 +44,7 @@ userrouter.post("/signin",async(req,res)=>{
     })
     if(existingUser){
     const token=jwt.sign({
-          userId:existingUser.email  
+          userId:existingUser._id  
         },JWT_SECRET)
         res.json({
         token: token
