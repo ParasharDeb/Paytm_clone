@@ -3,7 +3,7 @@ import {Request,Response,NextFunction } from "express";
 const { JWT_SECRET } = require("./config");
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
+export const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
     const authHeader = req.headers["authorization"] || ' ';
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,9 +24,3 @@ const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
         return
     }
 };
-
-exports = {
-    authMiddleware
-}
-
- 

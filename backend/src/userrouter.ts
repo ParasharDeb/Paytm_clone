@@ -1,8 +1,9 @@
 import express from "express"
 import jwt from "jsonwebtoken"
-import { SinginSchema, SingupSchema } from "./types";
+import { SinginSchema, SingupSchema, Updateschema } from "./types";
 import { UserModel } from "./db";
 import {JWT_SECRET} from "./config"
+import {authMiddleware} from "./middleware"
 const userrouter=express.Router();
 userrouter.post("/signup",async(req,res)=>{
     const parseddata = SingupSchema.safeParse(req.body);
@@ -55,5 +56,18 @@ userrouter.post("/signin",async(req,res)=>{
             message:"User not Found"
         })
     }
+})
+userrouter.post("/update:userId",authMiddleware,async(req,res)=>{
+    const parseddata=Updateschema.safeParse(req.body);
+    if(!parseddata || !parseddata.data){
+        res.json({
+            message:"Invalid creadentials"
+        })
+    }
+
+    await UserModel.updateOne(req.body,{
+        //@ts-ignore
+        id:req.userId
+    })
 })
 export=userrouter
