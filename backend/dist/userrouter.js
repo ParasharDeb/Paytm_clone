@@ -79,14 +79,15 @@ userrouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
 userrouter.put("/update", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const parseddata = types_1.Updateschema.safeParse(req.body);
     if (!parseddata || !parseddata.data) {
-        res.json({
-            message: "Invalid creadentials"
+        return res.json({
+            message: "Invalid credentials"
         });
     }
-    yield db_1.UserModel.updateOne(req.body, {
-        //@ts-ignore
-        id: req.userId
-    });
+    yield db_1.UserModel.updateOne(
+    //@ts-ignore
+    { _id: req.userId }, // filter by user ID
+    { $set: parseddata.data } // update fields
+    );
     res.json({
         message: "Profile updated"
     });

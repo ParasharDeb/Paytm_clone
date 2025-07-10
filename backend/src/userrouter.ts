@@ -63,22 +63,24 @@ userrouter.post("/signin",async(req,res)=>{
         })
     }
 })
-userrouter.put("/update",authMiddleware,async(req,res)=>{
-    const parseddata=Updateschema.safeParse(req.body);
-    if(!parseddata || !parseddata.data){
-        res.json({
-            message:"Invalid creadentials"
-        })
+userrouter.put("/update", authMiddleware, async (req, res) => {
+    const parseddata = Updateschema.safeParse(req.body);
+    if (!parseddata || !parseddata.data) {
+        return res.json({
+            message: "Invalid credentials"
+        });
     }
 
-    await UserModel.updateOne(req.body,{
+    await UserModel.updateOne(
         //@ts-ignore
-        id:req.userId
-    })
+        { _id: req.userId }, // filter by user ID
+        { $set: parseddata.data } // update fields
+    );
+
     res.json({
-        message:"Profile updated"
-    })
-})
+        message: "Profile updated"
+    });
+});
 userrouter.get("/bulk", async (req, res) => {
     const filter = req.query.filter || "";
 
