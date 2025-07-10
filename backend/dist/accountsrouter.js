@@ -34,7 +34,6 @@ accountsrouter.get("/balance", middleware_1.authMiddleware, (req, res) => __awai
 accountsrouter.post("/transfer", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
-    session.startTransaction();
     const { amount, to } = req.body;
     //@ts-ignore
     const account = yield db_1.AccountModel.findOne({ userId: req.userId }).session(session);

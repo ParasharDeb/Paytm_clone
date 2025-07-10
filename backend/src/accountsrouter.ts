@@ -20,11 +20,10 @@ accountsrouter.get("/balance", authMiddleware, async (req, res) => {
 });
 accountsrouter.post("/transfer",authMiddleware,async(req,res)=>{
     const session = await mongoose.startSession();
-    session.startTransaction()
     session.startTransaction();
     const { amount, to } = req.body;
     //@ts-ignore
-     const account = await AccountModel.findOne({ userId: req.userId }).session(session);
+    const account = await AccountModel.findOne({ userId: req.userId }).session(session);
 
     if (!account || account.balance < amount) {
         await session.abortTransaction();

@@ -24,12 +24,13 @@ userrouter.post("/signup",async(req,res)=>{
         password:parseddata.data?.password,
         email:parseddata.data?.email
     })
-    await AccountModel.create({
-        userId:user._id,
-        balance:1+10000*Math.random()
-
-    })
     const userId=user._id;
+    await AccountModel.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
+
+
     const token=jwt.sign({
         id:userId
     },JWT_SECRET)
@@ -82,25 +83,30 @@ userrouter.get("/bulk", async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await UserModel.find({
-        $or: [{
-            firstName: {
-                "$regex": filter
+        $or: [
+            {
+                firstname: {
+                    "$regex": filter,
+                    "$options": "i"
+                }
+            },
+            {
+                lastname: {
+                    "$regex": filter,
+                    "$options": "i"
+                }
             }
-        }, {
-            lastName: {
-                "$regex": filter
-            }
-        }]
-    })
+        ]
+    });
 
     res.json({
-        //@ts-ignore
         user: users.map(user => ({
             email: user.email,
             firstName: user.firstname,
             lastName: user.lastname,
             _id: user._id
         }))
-    })
-})
+    });
+});
+
 export=userrouter

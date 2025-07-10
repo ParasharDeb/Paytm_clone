@@ -13,8 +13,7 @@ const userSchema = new mongoose_1.default.Schema({
     email: { type: String, required: true, unique: true }
 });
 const accountSchema = new mongoose_1.default.Schema({
-    userId: mongoose_1.default.Schema.Types.ObjectId,
-    ref: userSchema,
+    userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "User", required: true },
     balance: { type: Number, required: true }
 });
 const UserModel = mongoose_1.default.model("User", userSchema);

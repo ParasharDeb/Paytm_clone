@@ -38,11 +38,11 @@ userrouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
         password: (_d = parseddata.data) === null || _d === void 0 ? void 0 : _d.password,
         email: (_e = parseddata.data) === null || _e === void 0 ? void 0 : _e.email
     });
-    yield db_1.AccountModel.create({
-        userId: user._id,
-        balance: 1 + 10000 * Math.random()
-    });
     const userId = user._id;
+    yield db_1.AccountModel.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    });
     const token = jsonwebtoken_1.default.sign({
         id: userId
     }, config_1.JWT_SECRET);
@@ -94,18 +94,22 @@ userrouter.put("/update", middleware_1.authMiddleware, (req, res) => __awaiter(v
 userrouter.get("/bulk", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filter = req.query.filter || "";
     const users = yield db_1.UserModel.find({
-        $or: [{
-                firstName: {
-                    "$regex": filter
+        $or: [
+            {
+                firstname: {
+                    "$regex": filter,
+                    "$options": "i"
                 }
-            }, {
-                lastName: {
-                    "$regex": filter
+            },
+            {
+                lastname: {
+                    "$regex": filter,
+                    "$options": "i"
                 }
-            }]
+            }
+        ]
     });
     res.json({
-        //@ts-ignore
         user: users.map(user => ({
             email: user.email,
             firstName: user.firstname,
