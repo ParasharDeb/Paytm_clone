@@ -1,7 +1,7 @@
 import express from "express"
 import jwt from "jsonwebtoken"
 import { SinginSchema, SingupSchema, Updateschema } from "./types";
-import { UserModel } from "./db";
+import { AccountModel, UserModel } from "./db";
 import {JWT_SECRET} from "./config"
 import {authMiddleware} from "./middleware"
 const userrouter=express.Router();
@@ -23,6 +23,11 @@ userrouter.post("/signup",async(req,res)=>{
         lastname:parseddata.data?.lastname,
         password:parseddata.data?.password,
         email:parseddata.data?.email
+    })
+    await AccountModel.create({
+        userId:user._id,
+        balance:1+10000*Math.random()
+
     })
     const userId=user._id;
     const token=jwt.sign({
@@ -57,7 +62,7 @@ userrouter.post("/signin",async(req,res)=>{
         })
     }
 })
-userrouter.put("/update:userId",authMiddleware,async(req,res)=>{
+userrouter.put("/update",authMiddleware,async(req,res)=>{
     const parseddata=Updateschema.safeParse(req.body);
     if(!parseddata || !parseddata.data){
         res.json({
