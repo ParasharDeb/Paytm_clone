@@ -74,6 +74,9 @@ userrouter.put("/update",authMiddleware,async(req,res)=>{
         //@ts-ignore
         id:req.userId
     })
+    res.json({
+        message:"Profile updated"
+    })
 })
 userrouter.get("/bulk", async (req, res) => {
     const filter = req.query.filter || "";

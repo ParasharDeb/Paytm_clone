@@ -16,6 +16,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const types_1 = require("./types");
 const db_1 = require("./db");
 const config_1 = require("./config");
+const middleware_1 = require("./middleware");
 const userrouter = express_1.default.Router();
 userrouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
@@ -31,14 +32,22 @@ userrouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
             message: "Email already registered"
         });
     }
-    yield db_1.UserModel.create({
+    const user = yield db_1.UserModel.create({
         firstname: (_b = parseddata.data) === null || _b === void 0 ? void 0 : _b.firstname,
         lastname: (_c = parseddata.data) === null || _c === void 0 ? void 0 : _c.lastname,
         password: (_d = parseddata.data) === null || _d === void 0 ? void 0 : _d.password,
         email: (_e = parseddata.data) === null || _e === void 0 ? void 0 : _e.email
     });
+    yield db_1.AccountModel.create({
+        userId: user._id,
+        balance: 1 + 10000 * Math.random()
+    });
+    const userId = user._id;
+    const token = jsonwebtoken_1.default.sign({
+        id: userId
+    }, config_1.JWT_SECRET);
     res.json({
-        message: "You have signed up succesfully"
+        token: token
     });
 }));
 userrouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,7 +64,7 @@ userrouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
     });
     if (existingUser) {
         const token = jsonwebtoken_1.default.sign({
-            userId: existingUser.email
+            userId: existingUser._id
         }, config_1.JWT_SECRET);
         res.json({
             token: token
@@ -66,5 +75,43 @@ userrouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
             message: "User not Found"
         });
     }
+}));
+userrouter.put("/update", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const parseddata = types_1.Updateschema.safeParse(req.body);
+    if (!parseddata || !parseddata.data) {
+        res.json({
+            message: "Invalid creadentials"
+        });
+    }
+    yield db_1.UserModel.updateOne(req.body, {
+        //@ts-ignore
+        id: req.userId
+    });
+    res.json({
+        message: "Profile updated"
+    });
+}));
+userrouter.get("/bulk", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filter = req.query.filter || "";
+    const users = yield db_1.UserModel.find({
+        $or: [{
+                firstName: {
+                    "$regex": filter
+                }
+            }, {
+                lastName: {
+                    "$regex": filter
+                }
+            }]
+    });
+    res.json({
+        //@ts-ignore
+        user: users.map(user => ({
+            email: user.email,
+            firstName: user.firstname,
+            lastName: user.lastname,
+            _id: user._id
+        }))
+    });
 }));
 module.exports = userrouter;

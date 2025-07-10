@@ -2,25 +2,18 @@ import {Request,Response,NextFunction } from "express";
 
 import { JWT_SECRET } from "./config";
 import jwt from "jsonwebtoken"
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+    const token = req.headers["authorization"] ?? "";
 
-export const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
-    const authHeader = req.headers["authorization"] || ' ';
+    const decoded = jwt.verify(token, JWT_SECRET);
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(403).json({});
-        return
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        //@ts-ignore
+    if (decoded) {
+        // @ts-ignore: TODO: Fix this
         req.userId = decoded.userId;
-
         next();
-    } catch (err) {
-        res.status(403).json({});
-        return
+    } else {
+        res.status(403).json({
+            message: "Unauthorized"
+        })
     }
-};
+}
