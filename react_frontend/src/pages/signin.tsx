@@ -1,7 +1,7 @@
 export default function Signin(){
     return(
         <div>
-            hi there
+            Signin Page
         </div>
     )
 }
