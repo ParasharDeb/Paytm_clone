@@ -6,7 +6,7 @@ import Logouticon from "../Icons/logout"
 import Settingsicon from "../Icons/settings"
 
 export default function Leftnavbar(){
-    const styles= "py-6 px-4 flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg"
+    const styles= "py-6 px-5 flex items-center gap-2 cursor-pointer hover:bg-gray-200 rounded-lg"
     return(
         <div >
             <div className={styles}><Homeicon/><div>Home</div></div>

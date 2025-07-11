@@ -1,5 +1,5 @@
 import Dashboardcomp from "../components/dashboardcom"
-import Leftnavbar from "./leftNavbar"
+import Leftnavbar from "../components/leftNavbar"
 
 export default function Dashboard(){
     return(
