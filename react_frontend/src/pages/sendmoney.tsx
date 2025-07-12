@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from "axios";
 import { useState } from 'react';
 
@@ -7,7 +7,7 @@ export default function SendMoney (){
     const id = searchParams.get("id");
     const name = searchParams.get("name") || ""; // fallback to empty string if null
     const [amount, setAmount] = useState("");
-
+    const navigate=useNavigate()
     return (
         <div className="flex justify-center h-screen bg-gray-100">
             <div className="h-full flex flex-col justify-center">
@@ -44,7 +44,7 @@ export default function SendMoney (){
                             </div>
                             <button
                                 onClick={() => {
-                                    axios.post("http://localhost:3000/api/v1/account/transfer", {
+                                    axios.post("http://localhost:3000/api/v1/accounts/transfer", {
                                         to: id,
                                         amount
                                     }, {
@@ -52,8 +52,9 @@ export default function SendMoney (){
                                             Authorization: "Bearer " + localStorage.getItem("token")
                                         }
                                     })
+                                    navigate("/dashboard");
                                 }}
-                                className="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white"
+                                className="justify-center hover:bg-green-600 cursor-pointer rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white"
                             >
                                 Initiate Transfer
                             </button>

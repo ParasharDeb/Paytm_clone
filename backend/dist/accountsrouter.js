@@ -35,9 +35,17 @@ accountsrouter.post("/transfer", middleware_1.authMiddleware, (req, res) => __aw
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     const { amount, to } = req.body;
-    //@ts-ignore
-    const account = yield db_1.AccountModel.findOne({ userId: req.userId }).session(session);
-    if (!account || account.balance < amount) {
+    const account = yield db_1.AccountModel.findOne({
+        //@ts-ignore
+        userId: req.userId
+    });
+    if (!account) {
+        res.json({
+            message: "account not founf"
+        });
+        return;
+    }
+    if (account.balance < amount) {
         yield session.abortTransaction();
         return res.status(400).json({
             message: "Insufficient balance"
@@ -50,9 +58,10 @@ accountsrouter.post("/transfer", middleware_1.authMiddleware, (req, res) => __aw
             message: "Invalid account"
         });
     }
-    // @ts-ignore
+    //@ts-ignore
     yield db_1.AccountModel.updateOne({ userId: req.userId }, { $inc: { balance: -amount } }).session(session);
     yield db_1.AccountModel.updateOne({ userId: to }, { $inc: { balance: amount } }).session(session);
+    // Commit the transaction
     yield session.commitTransaction();
     res.json({
         message: "Transfer successful"
