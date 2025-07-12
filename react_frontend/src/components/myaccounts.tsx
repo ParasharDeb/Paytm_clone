@@ -1,4 +1,5 @@
 import Addicon from "../Icons/addicon";
+import Sendicon from "../Icons/sent";
 import Buttoncomponent from "./Button";
 import { useNavigate } from "react-router-dom";
 export default function Accountsbox(){
@@ -11,7 +12,7 @@ export default function Accountsbox(){
             </div>       
             <div className="flex gap-2">
                 <div className="flex"><Buttoncomponent icon={Addicon} children="Add Money" varient="primary" size="small" onClickhandler={() =>navigate("/sendmoney") }/></div>
-                <div><Buttoncomponent children="Send Money" varient="primary" size="small" onClickhandler={() => navigate("/sendmoney")}/></div>            
+                <div><Buttoncomponent icon={Sendicon}children="Send Money" varient="primary" size="small" onClickhandler={() => navigate("/sendmoney")}/></div>            
             </div>
         </div>
     )

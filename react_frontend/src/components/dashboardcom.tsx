@@ -1,5 +1,5 @@
 import Money from "../Icons/money";
-import Historybox from "./history";
+import Historybox from "./users";
 import Accountsbox from "./myaccounts";
 import Smallcardcomponent from "./smallcard";
 
