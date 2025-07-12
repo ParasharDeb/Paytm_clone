@@ -17,7 +17,7 @@ export default function signin(){
             <div><InputBox type="text" label="email" value={email} onChange={(e)=>setemail(e.target.value)}/></div>            
             <div><InputBox type="password" label="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/></div>
            
-            <div className="flex items-center justify-center"><Buttoncomponent children="Signup" onClickhandler={
+            <div className="flex items-center justify-center"><Buttoncomponent children="Signin" onClickhandler={
                 async()=>{
                     await axios.post("http://localhost:3000/api/v1/user/signin", {
                         email: email,

@@ -29,7 +29,7 @@ export default function Signup() {
                             firstname,
                             lastname
                         }).then((response) => {
-                                navigate("/dashboard");
+                                navigate("/signin");
                                 localStorage.setItem("token", response.data.token); 
                             })
                             .catch((error) => {
