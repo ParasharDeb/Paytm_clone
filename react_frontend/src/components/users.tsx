@@ -3,7 +3,7 @@ import InputBox from "./inputbox";
 import axios from "axios";
 import User from "./User";
 
-export default function Historybox(){
+export default function Usersbox(){
     const [searchaccounts, setsearchaccounts] = useState("");
     const [users,setusers] = useState([]);
     useEffect(()=>{
@@ -13,7 +13,7 @@ export default function Historybox(){
         })
     },[searchaccounts])
     return(
-        <div className="bg-white shadow-lg rounded-lg  h-full ml-2">
+        <div className="bg-white shadow-lg rounded-lg  h-full ml-2 p-10">
             <InputBox type="text" value={searchaccounts} label="Search Accounts" onChange={(e)=>{
                 setsearchaccounts(e.target.value);
             }}/>
