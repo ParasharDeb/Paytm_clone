@@ -41,7 +41,7 @@ userrouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
     const userId = user._id;
     yield db_1.AccountModel.create({
         userId,
-        balance: 1 + Math.random() * 10000
+        balance: Math.round(1 + Math.random() * 10000)
     });
     const token = jsonwebtoken_1.default.sign({
         id: userId

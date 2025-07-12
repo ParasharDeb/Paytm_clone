@@ -6,7 +6,7 @@ const accountsrouter=express.Router();
 accountsrouter.get("/balance", authMiddleware, async (req, res) => {
     const account = await AccountModel.findOne({
         //@ts-ignore
-        userId: req.userId
+        userId:  new mongoose.Types.ObjectId(req.userId)
     });
     if(!account){
         res.status(411).json({

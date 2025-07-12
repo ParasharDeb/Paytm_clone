@@ -19,7 +19,7 @@ const accountsrouter = express_1.default.Router();
 accountsrouter.get("/balance", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const account = yield db_1.AccountModel.findOne({
         //@ts-ignore
-        userId: req.userId
+        userId: new mongoose_1.default.Types.ObjectId(req.userId)
     });
     if (!account) {
         res.status(411).json({

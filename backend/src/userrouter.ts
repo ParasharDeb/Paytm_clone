@@ -27,7 +27,7 @@ userrouter.post("/signup",async(req,res)=>{
     const userId=user._id;
     await AccountModel.create({
         userId,
-        balance: 1 + Math.random() * 10000
+        balance: Math.round(1 + Math.random() * 10000)
     })
 
 

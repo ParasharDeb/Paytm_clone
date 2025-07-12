@@ -28,11 +28,9 @@ export default function Signup() {
                             password,
                             firstname,
                             lastname
-                        })
-                            .then((response) => {
-                                 navigate("/dashboard");
+                        }).then((response) => {
+                                navigate("/dashboard");
                                 localStorage.setItem("token", response.data.token); 
-                                
                             })
                             .catch((error) => {
                                 console.error("Error during signup", error);
