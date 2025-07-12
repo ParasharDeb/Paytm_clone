@@ -21,16 +21,18 @@ export default function Signup() {
                 <div><InputBox type="text" label="Last Name" value={lastname} onChange={(e) => { setlastname(e.target.value) }} /></div>
                 <div className="flex items-center justify-center"><Buttoncomponent
                     children="Signup"
-                    onClickhandler={() => {
-                        axios.post("http://localhost:3000/api/v1/user/signup", {
+                    onClickhandler={
+                        async() => {
+                        await axios.post("http://localhost:3000/api/v1/user/signup", {
                             email,
                             password,
                             firstname,
                             lastname
                         })
                             .then((response) => {
+                                 navigate("/dashboard");
                                 localStorage.setItem("token", response.data.token); 
-                                navigate("/dashboard");
+                                
                             })
                             .catch((error) => {
                                 console.error("Error during signup", error);

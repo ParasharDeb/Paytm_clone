@@ -19,11 +19,13 @@ export default function signin(){
            
             <div className="flex items-center justify-center"><Buttoncomponent children="Signup" onClickhandler={
                 async()=>{
-                    axios.post("http://localhost:3000/api/v1/user/signin", {
+                    await axios.post("http://localhost:3000/api/v1/user/signin", {
                         email: email,
                         password: password
-                    }).then(()=>{
+                    }).then((response)=>{
                         navigate("/dashboard");
+
+                        localStorage.setItem("token", response.data.token);
                     }).catch((error)=>{
                         console.error("Error during signin", error);
                     });
