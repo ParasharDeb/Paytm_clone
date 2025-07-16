@@ -1,5 +1,6 @@
 import express from "express"
 import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 import { SinginSchema, SingupSchema, Updateschema } from "./types";
 import { AccountModel, UserModel } from "./db";
 import {JWT_SECRET} from "./config"
@@ -18,10 +19,12 @@ userrouter.post("/signup",async(req,res)=>{
             message:"Email already registered"
         })
     }
+    //@ts-ignore
+    const hashed_password= bcrypt.hash(parseddata.data?.password,10)
     const user=await UserModel.create({
         firstname:parseddata.data?.firstname,
         lastname:parseddata.data?.lastname,
-        password:parseddata.data?.password,
+        password:hashed_password,
         email:parseddata.data?.email
     })
     const userId=user._id;
