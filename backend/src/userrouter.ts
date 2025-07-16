@@ -84,8 +84,8 @@ userrouter.put("/update", authMiddleware, async (req, res) => {
 
     await UserModel.updateOne(
         //@ts-ignore
-        { _id: req.userId }, // filter by user ID
-        { $set: parseddata.data } // update fields
+        { _id: req.userId }, 
+        { $set: parseddata.data } 
     );
 
     res.json({
