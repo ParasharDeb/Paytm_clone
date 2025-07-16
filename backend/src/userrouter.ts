@@ -50,9 +50,17 @@ userrouter.post("/signin",async(req,res)=>{
     }
     const existingUser=await UserModel.findOne({
         email:parseddata.data?.email,
-        password:parseddata.data?.password
+
     })
     if(existingUser){
+        //@ts-ignore
+    const password=bcrypt.compare(parseddata.data?.password,existingUser.password)
+    if(!password){
+        res.json({
+            message:"Incorrect password"
+        })
+        return 
+    }
     const token=jwt.sign({
           userId:existingUser._id  
         },JWT_SECRET)
