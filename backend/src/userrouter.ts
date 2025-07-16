@@ -1,11 +1,15 @@
 import express from "express"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import { Request } from "express";
 import { SinginSchema, SingupSchema, Updateschema } from "./types";
 import { AccountModel, UserModel } from "./db";
 import {JWT_SECRET} from "./config"
 import {authMiddleware} from "./middleware"
 const userrouter=express.Router();
+interface Authrequest extends Request{
+    userId:string
+}
 userrouter.post("/signup",async(req,res)=>{
     const parseddata = SingupSchema.safeParse(req.body);
     if(!parseddata){
@@ -74,6 +78,7 @@ userrouter.post("/signin",async(req,res)=>{
         })
     }
 })
+
 userrouter.put("/update", authMiddleware, async (req, res) => {
     const parseddata = Updateschema.safeParse(req.body);
     if (!parseddata || !parseddata.data) {
@@ -83,9 +88,9 @@ userrouter.put("/update", authMiddleware, async (req, res) => {
     }
 
     await UserModel.updateOne(
-        //@ts-ignore
-        { _id: req.userId }, 
-        { $set: parseddata.data } 
+
+        { _id: (req as Authrequest).userId }, // filter by user ID
+        { $set: parseddata.data } // update fields
     );
 
     res.json({
