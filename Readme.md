@@ -93,4 +93,4 @@ This project is licensed under the **MIT License**.
 
 ---
 
-Made with ❤️ by **[Your Name](https://github.com/ParasharDeb)**
+Made with ❤️ by **[Parashar Deb](https://github.com/ParasharDeb)**
