@@ -45,7 +45,7 @@ Built with **TypeScript, Node.js, Express, Prisma, Next.js, React, Tailwind CSS,
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the Repository
-git clone https://github.com/ParasharDeb
+git clone https://github.com/ParasharDeb/Paytm_clone
 cd paytm-clone
 
 ### 2️⃣ Install Dependencies
@@ -93,4 +93,4 @@ This project is licensed under the **MIT License**.
 
 ---
 
-Made with ❤️ by **[Your Name](https://github.com/your-username)**
+Made with ❤️ by **[Your Name](https://github.com/ParasharDeb)**
